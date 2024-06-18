@@ -1,19 +1,12 @@
+import JsonValidator from "./components/JsonValidator.tsx";
 import './App.css'
 
-const JsonValidator = () => {
-    return (
-        <div>
-            JSON Validator
-        </div>
-    )
-}
-
 const App = () => {
-  return (
-    <>
-        <JsonValidator />
-    </>
-  )
+    return (
+        <>
+            <JsonValidator />
+        </>
+    )
 }
 
 export default App
