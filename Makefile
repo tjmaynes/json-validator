@@ -1,6 +1,6 @@
 install:
 	npm install
-	npx playwright install
+	npx playwright install --with-deps
 
 dev:
 	npm run dev
