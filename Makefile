@@ -29,4 +29,4 @@ start:
 ship_it: lint build test
 	git push
 
-deploy: build test
+deploy: install build test
