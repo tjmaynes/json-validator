@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useReducer } from 'react'
 
 const isValidJson = (rawValue: string): boolean => {
   try {
@@ -9,24 +9,63 @@ const isValidJson = (rawValue: string): boolean => {
   }
 }
 
-const useJsonValidator = () => {
-  const [rawValue, setRawValue] = useState('')
-  const [isValid, setIsValid] = useState(false)
+enum JsonValidatorStateType {
+  INITIAL,
+  VALID,
+  INVALID,
+}
 
-  useEffect(() => {
-    setIsValid(isValidJson(rawValue))
-  }, [rawValue])
+type JsonValidatorState =
+  | {
+      type: JsonValidatorStateType.INITIAL
+      value: ''
+    }
+  | {
+      type: JsonValidatorStateType.VALID
+      value: string
+      message: 'Is valid'
+    }
+  | {
+      type: JsonValidatorStateType.INVALID
+      value: string
+      message: 'Is not valid'
+    }
 
-  return { rawValue, setRawValue, isValid }
+enum JsonValidatorActionType {
+  ON_TYPING,
+}
+
+type JsonValidatorAction = {
+  type: JsonValidatorActionType.ON_TYPING
+  entry: string
+}
+
+const jsonValidatorReducer = (
+  state: JsonValidatorState,
+  action: JsonValidatorAction
+): JsonValidatorState => {
+  switch (action.type) {
+    case JsonValidatorActionType.ON_TYPING: {
+      return isValidJson(action.entry)
+        ? {
+            type: JsonValidatorStateType.VALID,
+            value: state.value,
+            message: 'Is valid',
+          }
+        : {
+            type: JsonValidatorStateType.INVALID,
+            value: state.value,
+            message: 'Is not valid',
+          }
+    }
+  }
 }
 
 const JsonValidator = () => {
-  const { rawValue, setRawValue, isValid } = useJsonValidator()
-
-  const getMessage = () => {
-    if (rawValue.length <= 0) return <></>
-    else return isValid ? <p>Is valid</p> : <p>Is not valid</p>
-  }
+  const [state, dispatch] = useReducer(jsonValidatorReducer, {
+    type: JsonValidatorStateType.INITIAL,
+    value: '',
+  })
 
   return (
     <form>
@@ -34,10 +73,19 @@ const JsonValidator = () => {
       <input
         type="text"
         id="json-validator-input"
-        value={rawValue}
-        onChange={(e) => setRawValue(e.target.value)}
+        value={state.value}
+        onChange={(e) =>
+          dispatch({
+            type: JsonValidatorActionType.ON_TYPING,
+            entry: e.target.value,
+          })
+        }
       />
-      {getMessage()}
+      {state.type !== JsonValidatorStateType.INITIAL ? (
+        <p>{state.message}</p>
+      ) : (
+        <></>
+      )}
     </form>
   )
 }

@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "start": "npm run build && npx http-server dist/ --port=3000",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "format": "eslint --fix .",
+    "format": "eslint . --ext ts,tsx --fix",
     "preview": "vite preview",
     "test": "vitest",
     "test:acceptance": "npx playwright test"

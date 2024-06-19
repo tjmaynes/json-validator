@@ -2,6 +2,9 @@ install:
 	npm install
 	npx playwright install
 
+dev:
+	npm run dev
+
 .PHONY: test
 test: unit acceptance
 
