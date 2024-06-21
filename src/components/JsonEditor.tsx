@@ -14,25 +14,21 @@ export const JsonEditor = ({
   placeholder,
   cssAttributes,
 }: JsonEditorProps) => {
-  const borderColor =
-    cssAttributes?.borderColor !== undefined
-      ? `border-${cssAttributes?.borderColor}-500`
-      : ''
-
   return (
-    <>
-      <CodeEditor
-        className={`bg-amber-100 p-6 text-base w-[800px] h-[600px] border-4 overflow-scroll ${borderColor} rounded`}
-        value={value}
-        language="json"
-        aria-label={placeholder}
-        placeholder={placeholder}
-        onChange={(e) => onChange?.(e.target.value)}
-        style={{
-          fontFamily:
-            'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
-        }}
-      />
-    </>
+    <CodeEditor
+      className={`bg-amber-100 text-base h-[600px] border-8 rounded-xl`}
+      value={value}
+      language="json"
+      aria-label={placeholder}
+      placeholder={placeholder}
+      onPaste={(e) => onChange?.(e.clipboardData.getData('Text'))}
+      onChange={(e) => onChange?.(e.target.value)}
+      style={{
+        ...cssAttributes,
+        overflow: 'scroll',
+        fontFamily:
+          'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
+      }}
+    />
   )
 }

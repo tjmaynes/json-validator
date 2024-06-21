@@ -1,1 +1,1 @@
-export * from './JsonValidationEditor'
+export * from './SimpleJsonEditor.tsx'

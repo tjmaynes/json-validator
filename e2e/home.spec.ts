@@ -11,22 +11,51 @@ test.describe('when a user navigates to the homepage', () => {
   })
 
   test('does not show a json validation status message', async ({ page }) => {
-    await expect(page.getByText('Is valid')).not.toBeVisible()
-    await expect(page.getByText('Is not valid')).not.toBeVisible()
+    await expect(page.getByText('👍')).not.toBeVisible()
+    await expect(page.getByText('👎')).not.toBeVisible()
   })
 
   getJsonExamples().forEach(({ text, description, isValid }) => {
     test.describe(`and the user enters a '${description}' into the input field`, () => {
-      const validationText = isValid ? 'Is valid' : 'Is not valid'
-      const oppositeValidationText = isValid ? 'Is not valid' : 'Is valid'
+      const validationText = isValid ? '👍' : '👎'
+      const oppositeValidationText = isValid ? '👎' : '👍'
 
       test(`should show an '${validationText}' message`, async ({ page }) => {
         await page.getByLabel('Type or paste your json here...').fill(text)
 
-        // TODO: fontawesome check mark is shown
         await expect(page.getByText(validationText)).toBeVisible()
         await expect(page.getByText(oppositeValidationText)).not.toBeVisible()
       })
     })
   })
+
+  test('should prettify unpretty json input when pretty button clicked and input is valid', async ({
+    page,
+  }) => {
+    const expectedOutput = `[
+   {
+      "hello": "world"
+   },
+   {
+      "green": "red"
+   }
+]`
+
+    await page
+      .getByLabel('Type or paste your json here...')
+      .fill('[ {"hello" : "world"}, { "green": "red"}]')
+
+    await expect(page.getByText('👍')).toBeVisible()
+
+    await page.getByText('Pretty').click()
+
+    await expect(
+      page
+        .getByPlaceholder('Type or paste your json here...')
+        .getByText(expectedOutput)
+    ).toBeVisible()
+    await expect(page.getByText('👍')).toBeVisible()
+  })
+
+  test('pretty button is disabled when input is invalid ', () => {})
 })
