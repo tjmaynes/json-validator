@@ -7,6 +7,7 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
+//    "outDir": "dist",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
@@ -25,6 +26,10 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

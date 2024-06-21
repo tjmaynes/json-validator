@@ -5,14 +5,8 @@ install:
 dev:
 	npm run dev
 
-.PHONY: test
-test: unit acceptance
-
-unit:
-	CI=true npm test
-
-acceptance:
-	npm run test:acceptance
+test:
+	npm test
 
 build:
 	npm run build

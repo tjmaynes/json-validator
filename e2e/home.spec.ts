@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { getJsonExamples } from '../helpers/fixtures'
+import { getJsonExamples } from './fixtures'
 
 test.describe('when a user navigates to the homepage', () => {
   test.beforeEach(async ({ page }) => {
@@ -21,8 +21,9 @@ test.describe('when a user navigates to the homepage', () => {
       const oppositeValidationText = isValid ? 'Is not valid' : 'Is valid'
 
       test(`should show an '${validationText}' message`, async ({ page }) => {
-        await page.getByLabel('Enter your json:').fill(text)
+        await page.getByLabel('Type or paste your json here...').fill(text)
 
+        // TODO: fontawesome check mark is shown
         await expect(page.getByText(validationText)).toBeVisible()
         await expect(page.getByText(oppositeValidationText)).not.toBeVisible()
       })

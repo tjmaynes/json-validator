@@ -1,11 +1,10 @@
-import JsonValidator from './components/JsonValidator.tsx'
-import './App.css'
+import { JsonValidationEditor } from '@/components'
 
 const App = () => {
   return (
-    <>
-      <JsonValidator />
-    </>
+    <div className="flex w-full h-full bg-amber-200 justify-center p-10 items-center">
+      <JsonValidationEditor />
+    </div>
   )
 }
 
