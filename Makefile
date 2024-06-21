@@ -1,5 +1,5 @@
 install:
-	npm install
+	npm ci
 	npx playwright install --with-deps
 
 dev:
