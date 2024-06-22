@@ -33,7 +33,10 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        permissions: ["clipboard-read", "clipboard-write"]
+      },
     },
     {
       name: 'firefox',
@@ -45,7 +48,10 @@ export default defineConfig({
     },
     {
       name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
+      use: {
+        ...devices['Pixel 5'],
+        permissions: ["clipboard-read", "clipboard-write"]
+      },
     },
     {
       name: 'Mobile Safari',

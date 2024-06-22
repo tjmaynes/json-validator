@@ -1,4 +1,4 @@
-import { useReducer } from 'react'
+import { useCallback, useReducer } from 'react'
 import { JsonEditor } from '@/components/JsonEditor.tsx'
 import { isValidJson, prettifyJson } from '@/utils/json-utils.ts'
 
@@ -89,6 +89,12 @@ export const SimpleJsonEditor = () => {
 
   const { color } = getPresentationStyle(state)
 
+  const onCopyButtonClickedHandler = useCallback(() => {
+    navigator.clipboard.writeText(state.value)
+
+    // TODO: show toast?
+  }, [state])
+
   return (
     <div className="flex flex-col w-full">
       <JsonEditor
@@ -105,6 +111,7 @@ export const SimpleJsonEditor = () => {
       {state.state !== SimpleJsonEditorStates.INITIAL && (
         <div className="flex items-center">
           <button
+            aria-label="Pretty"
             disabled={state.state !== SimpleJsonEditorStates.VALID}
             onClick={() =>
               dispatch({
@@ -114,6 +121,13 @@ export const SimpleJsonEditor = () => {
             }
           >
             Pretty
+          </button>
+          <button
+            aria-label="Copy"
+            disabled={state.state !== SimpleJsonEditorStates.VALID}
+            onClick={() => onCopyButtonClickedHandler()}
+          >
+            Copy
           </button>
           <ValidationStatus {...state} />
         </div>

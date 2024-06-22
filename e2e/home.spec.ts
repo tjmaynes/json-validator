@@ -29,6 +29,25 @@ test.describe('when a user navigates to the homepage', () => {
     })
   })
 
+  test('should copy json to clipboard when copy button clicked', async ({
+    page,
+    browserName,
+  }) => {
+    const expected = '[{"hello" : "world"}, {"green": "red"}]'
+
+    await page.getByLabel('Type or paste your json here...').fill(expected)
+
+    await page.getByLabel('Copy').click()
+
+    if (!['webkit', 'Desktop Safari', 'Mobile Safari'].includes(browserName)) {
+      const handle = await page.evaluateHandle(() =>
+        navigator.clipboard.readText()
+      )
+      const clipboardContent = await handle.jsonValue()
+      expect(clipboardContent).toEqual(expected)
+    }
+  })
+
   test('should prettify unpretty json input when pretty button clicked and input is valid', async ({
     page,
   }) => {
@@ -47,7 +66,7 @@ test.describe('when a user navigates to the homepage', () => {
 
     await expect(page.getByText('👍')).toBeVisible()
 
-    await page.getByText('Pretty').click()
+    await page.getByLabel('Pretty').click()
 
     await expect(
       page
