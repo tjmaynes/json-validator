@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, Locator } from '@playwright/test'
 import { getJsonExamples } from './fixtures'
 
 test.describe('when a user navigates to the homepage', () => {
@@ -29,29 +29,65 @@ test.describe('when a user navigates to the homepage', () => {
     })
   })
 
-  test('should copy json to clipboard when copy button clicked', async ({
-    page,
-    browserName,
-  }) => {
+  test.describe('other functionality', () => {
     const expected = '[{"hello" : "world"}, {"green": "red"}]'
+    let placeholderText: Locator
 
-    await page.getByLabel('Type or paste your json here...').fill(expected)
+    test.beforeEach(async ({ page }) => {
+      placeholderText = page.getByPlaceholder('Type or paste your json here...')
 
-    await page.getByLabel('Copy').click()
+      await placeholderText.fill(expected)
+    })
 
-    if (!['webkit', 'Desktop Safari', 'Mobile Safari'].includes(browserName)) {
-      const handle = await page.evaluateHandle(() =>
-        navigator.clipboard.readText()
-      )
-      const clipboardContent = await handle.jsonValue()
-      expect(clipboardContent).toEqual(expected)
-    }
-  })
+    test('should copy json to clipboard when copy button clicked', async ({
+      page,
+      browserName,
+    }) => {
+      await page.getByLabel('Copy').click()
 
-  test('should prettify unpretty json input when pretty button clicked and input is valid', async ({
-    page,
-  }) => {
-    const expectedOutput = `[
+      if (
+        !['webkit', 'Desktop Safari', 'Mobile Safari'].includes(browserName)
+      ) {
+        const handle = await page.evaluateHandle(() =>
+          navigator.clipboard.readText()
+        )
+        const clipboardContent = await handle.jsonValue()
+        expect(clipboardContent).toEqual(expected)
+      }
+
+      await expect(page.getByText('Copied to clipboard!')).toBeVisible()
+    })
+
+    test('should compress json when compress button clicked', async ({
+      page,
+    }) => {
+      await expect(placeholderText.getByText(expected)).toBeVisible()
+
+      await page.getByLabel('Compress').click()
+
+      await expect(
+        placeholderText.getByText('[{"hello":"world"},{"green":"red"}]')
+      ).toBeVisible()
+
+      await expect(page.getByText('Compressed')).toBeVisible()
+    })
+
+    test('should clear textarea when clear button clicked', async ({
+      page,
+    }) => {
+      await expect(placeholderText.getByText(expected)).toBeVisible()
+
+      await page.getByLabel('Clear').click()
+
+      await expect(placeholderText.getByText(expected)).not.toBeVisible()
+
+      await expect(page.getByText('Cleared')).toBeVisible()
+    })
+
+    test('should prettify unpretty json input when pretty button clicked and input is valid', async ({
+      page,
+    }) => {
+      const expectedOutput = `[
    {
       "hello": "world"
    },
@@ -60,21 +96,23 @@ test.describe('when a user navigates to the homepage', () => {
    }
 ]`
 
-    await page
-      .getByLabel('Type or paste your json here...')
-      .fill('[ {"hello" : "world"}, { "green": "red"}]')
+      await page
+        .getByLabel('Type or paste your json here...')
+        .fill('[ {"hello" : "world"}, { "green": "red"}]')
 
-    await expect(page.getByText('👍')).toBeVisible()
+      await expect(page.getByText('👍')).toBeVisible()
 
-    await page.getByLabel('Pretty').click()
+      await page.getByLabel('Pretty').click()
 
-    await expect(
-      page
-        .getByPlaceholder('Type or paste your json here...')
-        .getByText(expectedOutput)
-    ).toBeVisible()
-    await expect(page.getByText('👍')).toBeVisible()
+      await expect(
+        page
+          .getByPlaceholder('Type or paste your json here...')
+          .getByText(expectedOutput)
+      ).toBeVisible()
+
+      await expect(page.getByText('👍')).toBeVisible()
+    })
+
+    test('pretty button is disabled when input is invalid ', () => {})
   })
-
-  test('pretty button is disabled when input is invalid ', () => {})
 })

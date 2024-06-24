@@ -1,6 +1,7 @@
 import { useCallback, useReducer } from 'react'
 import { JsonEditor } from '@/components/JsonEditor.tsx'
-import { isValidJson, prettifyJson } from '@/utils/json-utils.ts'
+import { compressJson, isValidJson, prettifyJson } from '@/utils/json-utils.ts'
+import toast, { Toaster } from 'react-hot-toast'
 
 enum SimpleJsonEditorStates {
   INITIAL,
@@ -26,7 +27,9 @@ type SimpleJsonEditorState =
 
 enum SimpleJsonEditorActions {
   ON_TYPING,
-  ON_FORMAT_BUTTON_CLICK,
+  ON_PRETTY_BUTTON_CLICK,
+  ON_COMPRESS_BUTTON_CLICK,
+  ON_CLEAR_BUTTON_CLICK,
 }
 
 type SimpleJsonEditorAction =
@@ -35,12 +38,17 @@ type SimpleJsonEditorAction =
       entry: string
     }
   | {
-      action: SimpleJsonEditorActions.ON_FORMAT_BUTTON_CLICK
-      value: string
+      action: SimpleJsonEditorActions.ON_PRETTY_BUTTON_CLICK
+    }
+  | {
+      action: SimpleJsonEditorActions.ON_COMPRESS_BUTTON_CLICK
+    }
+  | {
+      action: SimpleJsonEditorActions.ON_CLEAR_BUTTON_CLICK
     }
 
 const simpleJsonEditorReducer = (
-  _: SimpleJsonEditorState,
+  state: SimpleJsonEditorState,
   action: SimpleJsonEditorAction
 ): SimpleJsonEditorState => {
   switch (action.action) {
@@ -60,10 +68,20 @@ const simpleJsonEditorReducer = (
             value: action.entry,
           }
     }
-    case SimpleJsonEditorActions.ON_FORMAT_BUTTON_CLICK:
+    case SimpleJsonEditorActions.ON_PRETTY_BUTTON_CLICK:
       return {
         state: SimpleJsonEditorStates.VALID,
-        value: prettifyJson(action.value),
+        value: prettifyJson(state.value),
+      }
+    case SimpleJsonEditorActions.ON_COMPRESS_BUTTON_CLICK:
+      return {
+        state: SimpleJsonEditorStates.VALID,
+        value: compressJson(state.value),
+      }
+    case SimpleJsonEditorActions.ON_CLEAR_BUTTON_CLICK:
+      return {
+        state: SimpleJsonEditorStates.INITIAL,
+        value: '',
       }
   }
 }
@@ -89,11 +107,35 @@ export const SimpleJsonEditor = () => {
 
   const { color } = getPresentationStyle(state)
 
+  const onPrettyButtonClickedHandler = useCallback(() => {
+    dispatch({
+      action: SimpleJsonEditorActions.ON_PRETTY_BUTTON_CLICK,
+    })
+
+    toast('Prettified')
+  }, [])
+
+  const onCompressButtonClickedHandler = useCallback(() => {
+    dispatch({
+      action: SimpleJsonEditorActions.ON_COMPRESS_BUTTON_CLICK,
+    })
+
+    toast('Compressed')
+  }, [])
+
   const onCopyButtonClickedHandler = useCallback(() => {
     navigator.clipboard.writeText(state.value)
 
-    // TODO: show toast?
+    toast.success('Copied to clipboard!')
   }, [state])
+
+  const onClearButtonClickedHandler = useCallback(() => {
+    dispatch({
+      action: SimpleJsonEditorActions.ON_CLEAR_BUTTON_CLICK,
+    })
+
+    toast('Cleared')
+  }, [])
 
   return (
     <div className="flex flex-col w-full">
@@ -113,14 +155,16 @@ export const SimpleJsonEditor = () => {
           <button
             aria-label="Pretty"
             disabled={state.state !== SimpleJsonEditorStates.VALID}
-            onClick={() =>
-              dispatch({
-                action: SimpleJsonEditorActions.ON_FORMAT_BUTTON_CLICK,
-                value: state.value,
-              })
-            }
+            onClick={() => onPrettyButtonClickedHandler()}
           >
             Pretty
+          </button>
+          <button
+            aria-label="Compress"
+            disabled={state.state !== SimpleJsonEditorStates.VALID}
+            onClick={() => onCompressButtonClickedHandler()}
+          >
+            Compress
           </button>
           <button
             aria-label="Copy"
@@ -129,9 +173,17 @@ export const SimpleJsonEditor = () => {
           >
             Copy
           </button>
+          <button
+            aria-label="Clear"
+            disabled={state.state !== SimpleJsonEditorStates.VALID}
+            onClick={() => onClearButtonClickedHandler()}
+          >
+            Clear
+          </button>
           <ValidationStatus {...state} />
         </div>
       )}
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   )
 }
