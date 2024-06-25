@@ -8,7 +8,7 @@ export const isValidJson = (rawValue: string): boolean => {
 }
 
 export const prettifyJson = (rawValue: string): string =>
-  JSON.stringify(JSON.parse(rawValue), null, '   ')
+  JSON.stringify(JSON.parse(rawValue), null, '  ')
 
 export const compressJson = (rawValue: string): string =>
   JSON.stringify(JSON.parse(rawValue), null, '')

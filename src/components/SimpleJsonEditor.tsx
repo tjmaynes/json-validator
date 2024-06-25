@@ -88,14 +88,14 @@ const simpleJsonEditorReducer = (
 
 const getPresentationStyle = (
   state: SimpleJsonEditorState
-): { color: string } => {
+): { color: string; emoji: string } => {
   switch (state.state) {
     case SimpleJsonEditorStates.INITIAL:
-      return { color: 'rgb(113 113 122)' }
+      return { color: 'rgb(113 113 122)', emoji: '🤘' }
     case SimpleJsonEditorStates.VALID:
-      return { color: 'rgb(132 204 22)' }
+      return { color: 'rgb(132 204 22)', emoji: '👍' }
     case SimpleJsonEditorStates.INVALID:
-      return { color: 'rgb(239 68 68)' }
+      return { color: 'rgb(239 68 68)', emoji: '👎' }
   }
 }
 
@@ -105,14 +105,14 @@ export const SimpleJsonEditor = () => {
     value: '',
   })
 
-  const { color } = getPresentationStyle(state)
+  const { color, emoji } = getPresentationStyle(state)
 
   const onPrettyButtonClickedHandler = useCallback(() => {
     dispatch({
       action: SimpleJsonEditorActions.ON_PRETTY_BUTTON_CLICK,
     })
 
-    toast('Prettified')
+    toast('Prettified!', { icon: '💅' })
   }, [])
 
   const onCompressButtonClickedHandler = useCallback(() => {
@@ -120,7 +120,7 @@ export const SimpleJsonEditor = () => {
       action: SimpleJsonEditorActions.ON_COMPRESS_BUTTON_CLICK,
     })
 
-    toast('Compressed')
+    toast('Compressed!', { icon: '🤖' })
   }, [])
 
   const onCopyButtonClickedHandler = useCallback(() => {
@@ -133,12 +133,11 @@ export const SimpleJsonEditor = () => {
     dispatch({
       action: SimpleJsonEditorActions.ON_CLEAR_BUTTON_CLICK,
     })
-
-    toast('Cleared')
   }, [])
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full h-full bg-amber-200 p-10">
+      <p className="mb-7 text-center text-6xl">{emoji}</p>
       <JsonEditor
         placeholder="Type or paste your json here..."
         value={state.value}
@@ -150,53 +149,48 @@ export const SimpleJsonEditor = () => {
         }
         cssAttributes={{ borderColor: color }}
       />
-      {state.state !== SimpleJsonEditorStates.INITIAL && (
-        <div className="flex items-center">
-          <button
-            aria-label="Pretty"
-            disabled={state.state !== SimpleJsonEditorStates.VALID}
-            onClick={() => onPrettyButtonClickedHandler()}
-          >
-            Pretty
-          </button>
-          <button
-            aria-label="Compress"
-            disabled={state.state !== SimpleJsonEditorStates.VALID}
-            onClick={() => onCompressButtonClickedHandler()}
-          >
-            Compress
-          </button>
-          <button
-            aria-label="Copy"
-            disabled={state.state !== SimpleJsonEditorStates.VALID}
-            onClick={() => onCopyButtonClickedHandler()}
-          >
-            Copy
-          </button>
-          <button
-            aria-label="Clear"
-            disabled={state.state !== SimpleJsonEditorStates.VALID}
-            onClick={() => onClearButtonClickedHandler()}
-          >
-            Clear
-          </button>
-          <ValidationStatus {...state} />
-        </div>
-      )}
+      <div className="grid grid-flow-row sm:grid-flow-col gap-4 sm:max-w-[400px] my-4">
+        <SimpleJsonEditorButton
+          text="Pretty"
+          disabled={state.state !== SimpleJsonEditorStates.VALID}
+          onClick={() => onPrettyButtonClickedHandler()}
+        />
+        <SimpleJsonEditorButton
+          text="Compress"
+          disabled={state.state !== SimpleJsonEditorStates.VALID}
+          onClick={() => onCompressButtonClickedHandler()}
+        />
+        <SimpleJsonEditorButton
+          text="Copy"
+          disabled={state.state !== SimpleJsonEditorStates.VALID}
+          onClick={() => onCopyButtonClickedHandler()}
+        />
+        <SimpleJsonEditorButton
+          text="Clear"
+          disabled={false}
+          onClick={() => onClearButtonClickedHandler()}
+        />
+      </div>
       <Toaster position="top-right" reverseOrder={false} />
     </div>
   )
 }
 
-const ValidationStatus = ({
-  state,
+const SimpleJsonEditorButton = ({
+  text,
+  disabled,
+  onClick,
 }: {
-  state:
-    | SimpleJsonEditorStates.VALID
-    | SimpleJsonEditorStates.INVALID
-    | SimpleJsonEditorStates.FORMATTING
+  text: string
+  disabled: boolean
+  onClick?: () => void
 }) => (
-  <p className="text-6xl">
-    {state === SimpleJsonEditorStates.VALID ? '👍' : '👎'}
-  </p>
+  <button
+    className="bg-blue-500 text-white active:bg-blue-500 hover:bg-blue-500 disabled:bg-blue-400 disabled:text-gray-50 font-bold py-2 px-4 border-b-4 border-r-4 border-blue-700 hover:border-blue-500 rounded"
+    aria-label={text}
+    disabled={disabled}
+    onClick={() => onClick?.()}
+  >
+    {text}
+  </button>
 )

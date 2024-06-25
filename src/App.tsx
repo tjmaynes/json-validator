@@ -2,8 +2,10 @@ import { SimpleJsonEditor } from '@/components'
 
 const App = () => {
   return (
-    <div className="flex w-full h-full bg-amber-200 p-10">
+    <div className="grid grid-flow-row">
+      <header>Json Validator</header>
       <SimpleJsonEditor />
+      <footer>TJ Maynes</footer>
     </div>
   )
 }

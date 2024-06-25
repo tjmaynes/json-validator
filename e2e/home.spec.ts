@@ -10,9 +10,15 @@ test.describe('when a user navigates to the homepage', () => {
     await expect(page).toHaveTitle(/JSON Validator/)
   })
 
-  test('does not show a json validation status message', async ({ page }) => {
+  test('has initial state set', async ({ page }) => {
+    await expect(page.getByText('🤘')).toBeVisible()
     await expect(page.getByText('👍')).not.toBeVisible()
     await expect(page.getByText('👎')).not.toBeVisible()
+
+    await expect(page.getByLabel('Pretty')).toBeDisabled()
+    await expect(page.getByLabel('Compress')).toBeDisabled()
+    await expect(page.getByLabel('Copy')).toBeDisabled()
+    await expect(page.getByLabel('Clear')).toBeVisible()
   })
 
   getJsonExamples().forEach(({ text, description, isValid }) => {
@@ -69,7 +75,7 @@ test.describe('when a user navigates to the homepage', () => {
         placeholderText.getByText('[{"hello":"world"},{"green":"red"}]')
       ).toBeVisible()
 
-      await expect(page.getByText('Compressed')).toBeVisible()
+      await expect(page.getByText('Compressed!')).toBeVisible()
     })
 
     test('should clear textarea when clear button clicked', async ({
@@ -80,8 +86,6 @@ test.describe('when a user navigates to the homepage', () => {
       await page.getByLabel('Clear').click()
 
       await expect(placeholderText.getByText(expected)).not.toBeVisible()
-
-      await expect(page.getByText('Cleared')).toBeVisible()
     })
 
     test('should prettify unpretty json input when pretty button clicked and input is valid', async ({
@@ -96,21 +100,16 @@ test.describe('when a user navigates to the homepage', () => {
    }
 ]`
 
-      await page
-        .getByLabel('Type or paste your json here...')
-        .fill('[ {"hello" : "world"}, { "green": "red"}]')
+      await placeholderText.fill('[ {"hello" : "world"}, { "green": "red"}]')
 
       await expect(page.getByText('👍')).toBeVisible()
 
       await page.getByLabel('Pretty').click()
 
-      await expect(
-        page
-          .getByPlaceholder('Type or paste your json here...')
-          .getByText(expectedOutput)
-      ).toBeVisible()
+      await expect(placeholderText.getByText(expectedOutput)).toBeVisible()
 
       await expect(page.getByText('👍')).toBeVisible()
+      await expect(page.getByText('Prettified!')).toBeVisible()
     })
 
     test('pretty button is disabled when input is invalid ', () => {})

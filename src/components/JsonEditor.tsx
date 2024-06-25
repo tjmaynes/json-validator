@@ -16,7 +16,7 @@ export const JsonEditor = ({
 }: JsonEditorProps) => {
   return (
     <CodeEditor
-      className={`bg-amber-100 text-base h-[600px] border-8 rounded-xl`}
+      className="bg-amber-100 text-base h-[400px] md:h-[500px] w-full border-8 rounded-xl"
       value={value}
       language="json"
       aria-label={placeholder}
