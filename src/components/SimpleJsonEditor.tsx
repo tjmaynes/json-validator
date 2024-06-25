@@ -126,7 +126,7 @@ export const SimpleJsonEditor = () => {
   const onCopyButtonClickedHandler = useCallback(() => {
     navigator.clipboard.writeText(state.value)
 
-    toast('Copied to clipboard!', { icon: '✍' })
+    toast('Copied to clipboard!', { icon: '🐾' })
   }, [state])
 
   const onClearButtonClickedHandler = useCallback(() => {
@@ -138,8 +138,8 @@ export const SimpleJsonEditor = () => {
   }, [])
 
   return (
-    <div className="flex flex-col w-full h-full bg-amber-200 p-10">
-      <p className="mb-7 text-center text-7xl">{emoji}</p>
+    <div className="flex flex-col w-full h-full">
+      <p className="mb-8 text-center text-7xl">{emoji}</p>
       <JsonEditor
         placeholder="Type or paste your json here..."
         value={state.value}

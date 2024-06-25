@@ -10,6 +10,16 @@ test.describe('when a user navigates to the homepage', () => {
     await expect(page).toHaveTitle(/JSON Validator/)
   })
 
+  test('has heading', async ({ page }) => {
+    await page.getByText('JSON Validator').click()
+    await expect(page).toHaveURL('https://github.com/tjmaynes/json-validator')
+  })
+
+  test('has footer', async ({ page }) => {
+    await page.getByText('TJ Maynes').click()
+    await expect(page).toHaveURL('https://tjmaynes.com/')
+  })
+
   test('has initial state set', async ({ page }) => {
     await expect(page.getByText('🤘')).toBeVisible()
     await expect(page.getByText('👍')).not.toBeVisible()
