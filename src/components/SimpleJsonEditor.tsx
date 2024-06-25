@@ -139,7 +139,7 @@ export const SimpleJsonEditor = () => {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <p className="mb-8 text-center text-7xl">{emoji}</p>
+      <p className="pb-8 text-center text-7xl">{emoji}</p>
       <JsonEditor
         placeholder="Type or paste your json here..."
         value={state.value}

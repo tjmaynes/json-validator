@@ -27,7 +27,9 @@ function check_requirements() {
 function main() {
   check_requirements
 
-  ./node_modules/.bin/wrangler pages deploy "$CLOUDFLARE_PAGES_DIRECTORY"
+  ./node_modules/.bin/wrangler pages deploy \
+    --project-name "$CLOUDFLARE_PAGES_PROJECT_NAME" \
+    "$CLOUDFLARE_PAGES_DIRECTORY"
 
   echo "Done!"
 }
