@@ -18,7 +18,16 @@ test.describe('when a user navigates to the homepage', () => {
     await expect(page.getByLabel('Pretty')).toBeDisabled()
     await expect(page.getByLabel('Compress')).toBeDisabled()
     await expect(page.getByLabel('Copy')).toBeDisabled()
-    await expect(page.getByLabel('Clear')).toBeVisible()
+    await expect(page.getByLabel('Clear')).toBeDisabled()
+  })
+
+  test('clear and copy buttons are enabled when a single character is typed', async ({
+    page,
+  }) => {
+    await page.getByPlaceholder('Type or paste your json here...').fill('h')
+
+    await expect(page.getByLabel('Copy')).not.toBeDisabled()
+    await expect(page.getByLabel('Clear')).not.toBeDisabled()
   })
 
   getJsonExamples().forEach(({ text, description, isValid }) => {

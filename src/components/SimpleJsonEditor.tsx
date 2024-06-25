@@ -126,18 +126,20 @@ export const SimpleJsonEditor = () => {
   const onCopyButtonClickedHandler = useCallback(() => {
     navigator.clipboard.writeText(state.value)
 
-    toast.success('Copied to clipboard!')
+    toast('Copied to clipboard!', { icon: '✍' })
   }, [state])
 
   const onClearButtonClickedHandler = useCallback(() => {
     dispatch({
       action: SimpleJsonEditorActions.ON_CLEAR_BUTTON_CLICK,
     })
+
+    toast('Boom!', { icon: '💣' })
   }, [])
 
   return (
     <div className="flex flex-col w-full h-full bg-amber-200 p-10">
-      <p className="mb-7 text-center text-6xl">{emoji}</p>
+      <p className="mb-7 text-center text-7xl">{emoji}</p>
       <JsonEditor
         placeholder="Type or paste your json here..."
         value={state.value}
@@ -149,9 +151,9 @@ export const SimpleJsonEditor = () => {
         }
         cssAttributes={{ borderColor: color }}
       />
-      <div className="grid grid-flow-row sm:grid-flow-col gap-4 sm:max-w-[400px] my-4">
+      <div className="grid grid-flow-row sm:grid-flow-col gap-4 sm:max-w-[500px] my-4">
         <SimpleJsonEditorButton
-          text="Pretty"
+          text="Pretty print"
           disabled={state.state !== SimpleJsonEditorStates.VALID}
           onClick={() => onPrettyButtonClickedHandler()}
         />
@@ -162,12 +164,12 @@ export const SimpleJsonEditor = () => {
         />
         <SimpleJsonEditorButton
           text="Copy"
-          disabled={state.state !== SimpleJsonEditorStates.VALID}
+          disabled={state.state === SimpleJsonEditorStates.INITIAL}
           onClick={() => onCopyButtonClickedHandler()}
         />
         <SimpleJsonEditorButton
           text="Clear"
-          disabled={false}
+          disabled={state.state === SimpleJsonEditorStates.INITIAL}
           onClick={() => onClearButtonClickedHandler()}
         />
       </div>
