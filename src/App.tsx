@@ -1,7 +1,7 @@
 import { SimpleJsonEditor } from '@/components'
 
 const App = () => (
-  <div className="font-mono grid grid-flow-row bg-amber-200">
+  <div className="font-mono grid grid-flow-row min-h-screen bg-amber-200">
     <header className="text-center pl-0 mt-3 sm:text-left sm:pl-4">
       <a
         href="https://github.com/tjmaynes/json-validator"
