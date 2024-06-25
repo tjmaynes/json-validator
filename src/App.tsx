@@ -14,7 +14,7 @@ const App = () => (
       <SimpleJsonEditor />
     </section>
     <footer className="pl-0 mb-4 sm:pl-4">
-      <p className="text-sm text-center sm:text-left">
+      <p className="text-sm text-center">
         Built for fun & learning by{' '}
         <a
           href="https://tjmaynes.com/"
