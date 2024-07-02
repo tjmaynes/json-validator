@@ -1,6 +1,6 @@
 import { useCallback, useReducer } from 'react'
-import { JsonEditor } from '@/components/JsonEditor.tsx'
-import { compressJson, isValidJson, prettifyJson } from '@/utils/json-utils.ts'
+import { JsonEditor } from './JsonEditor'
+import { compressJson, isValidJson, prettifyJson } from '../utils/json-utils'
 import toast, { Toaster } from 'react-hot-toast'
 
 enum SimpleJsonEditorStates {

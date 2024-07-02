@@ -1,4 +1,4 @@
-import { SimpleJsonEditor } from '@/components'
+import { SimpleJsonEditor } from './components/SimpleJsonEditor'
 
 const App = () => (
   <div className="font-mono grid grid-flow-row min-h-screen bg-amber-200">
