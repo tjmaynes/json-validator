@@ -7,7 +7,6 @@ enum SimpleJsonEditorStates {
   INITIAL,
   VALID,
   INVALID,
-  FORMATTING,
 }
 
 type SimpleJsonEditorState =

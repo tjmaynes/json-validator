@@ -25,19 +25,10 @@ test.describe('when a user navigates to the homepage', () => {
     await expect(page.getByText('👍')).not.toBeVisible()
     await expect(page.getByText('👎')).not.toBeVisible()
 
-    await expect(page.getByLabel('Pretty')).toBeDisabled()
+    await expect(page.getByLabel('Pretty print')).toBeDisabled()
     await expect(page.getByLabel('Compress')).toBeDisabled()
     await expect(page.getByLabel('Copy')).toBeDisabled()
     await expect(page.getByLabel('Clear')).toBeDisabled()
-  })
-
-  test('clear and copy buttons are enabled when a single character is typed', async ({
-    page,
-  }) => {
-    await page.getByPlaceholder('Type or paste your json here...').fill('h')
-
-    await expect(page.getByLabel('Copy')).not.toBeDisabled()
-    await expect(page.getByLabel('Clear')).not.toBeDisabled()
   })
 
   getJsonExamples().forEach(({ text, description, isValid }) => {
@@ -62,6 +53,11 @@ test.describe('when a user navigates to the homepage', () => {
       placeholderText = page.getByPlaceholder('Type or paste your json here...')
 
       await placeholderText.fill(expected)
+
+      await expect(page.getByLabel('Copy')).not.toBeDisabled()
+      await expect(page.getByLabel('Clear')).not.toBeDisabled()
+      await expect(page.getByLabel('Compress')).not.toBeDisabled()
+      await expect(page.getByLabel('Pretty print')).not.toBeDisabled()
     })
 
     test('should copy json to clipboard when copy button clicked', async ({
@@ -123,7 +119,7 @@ test.describe('when a user navigates to the homepage', () => {
 
       await expect(page.getByText('👍')).toBeVisible()
 
-      await page.getByLabel('Pretty').click()
+      await page.getByLabel('Pretty print').click()
 
       await expect(placeholderText.getByText(expectedOutput)).toBeVisible()
 
