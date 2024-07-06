@@ -2,7 +2,7 @@ import { SimpleJsonEditor } from './components/SimpleJsonEditor'
 
 const App = () => (
   <div className="font-mono grid grid-flow-row min-h-screen bg-amber-200">
-    <header className="text-center pl-0 mt-3 sm:text-left sm:pl-4">
+    <header className="text-left pl-4 mt-3">
       <a
         href="https://github.com/tjmaynes/json-validator"
         className="text-2xl font-bold text-blue-600 dark:text-blue-500"
