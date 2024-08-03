@@ -48,7 +48,7 @@ type SimpleJsonEditorAction =
 
 const simpleJsonEditorReducer = (
   state: SimpleJsonEditorState,
-  action: SimpleJsonEditorAction
+  action: SimpleJsonEditorAction,
 ): SimpleJsonEditorState => {
   switch (action.action) {
     case SimpleJsonEditorActions.ON_TYPING: {
@@ -85,9 +85,7 @@ const simpleJsonEditorReducer = (
   }
 }
 
-const getPresentationStyle = (
-  state: SimpleJsonEditorState
-): { color: string; emoji: string } => {
+const getPresentationStyle = (state: SimpleJsonEditorState): { color: string; emoji: string } => {
   switch (state.state) {
     case SimpleJsonEditorStates.INITIAL:
       return { color: 'rgb(113 113 122)', emoji: '🤘' }
@@ -137,10 +135,10 @@ export const SimpleJsonEditor = () => {
   }, [])
 
   return (
-    <div className="flex flex-col w-full h-full">
-      <p className="pb-8 text-center text-7xl">{emoji}</p>
+    <div className='flex flex-col w-full h-full'>
+      <p className='pb-8 text-center text-7xl'>{emoji}</p>
       <JsonEditor
-        placeholder="Type or paste your json here..."
+        placeholder='Type or paste your json here...'
         value={state.value}
         onChange={(entry: string) =>
           dispatch({
@@ -150,29 +148,29 @@ export const SimpleJsonEditor = () => {
         }
         cssAttributes={{ borderColor: color }}
       />
-      <div className="grid grid-flow-row sm:grid-flow-col gap-4 sm:max-w-[500px] my-4">
+      <div className='grid grid-flow-row sm:grid-flow-col gap-4 sm:max-w-[500px] my-4'>
         <SimpleJsonEditorButton
-          text="Pretty print"
+          text='Pretty print'
           disabled={state.state !== SimpleJsonEditorStates.VALID}
           onClick={() => onPrettyButtonClickedHandler()}
         />
         <SimpleJsonEditorButton
-          text="Compress"
+          text='Compress'
           disabled={state.state !== SimpleJsonEditorStates.VALID}
           onClick={() => onCompressButtonClickedHandler()}
         />
         <SimpleJsonEditorButton
-          text="Copy"
+          text='Copy'
           disabled={state.state === SimpleJsonEditorStates.INITIAL}
           onClick={() => onCopyButtonClickedHandler()}
         />
         <SimpleJsonEditorButton
-          text="Clear"
+          text='Clear'
           disabled={state.state === SimpleJsonEditorStates.INITIAL}
           onClick={() => onClearButtonClickedHandler()}
         />
       </div>
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster position='top-right' reverseOrder={false} />
     </div>
   )
 }
@@ -187,7 +185,7 @@ const SimpleJsonEditorButton = ({
   onClick?: () => void
 }) => (
   <button
-    className="bg-blue-500 text-white active:bg-blue-500 hover:bg-blue-500 disabled:bg-blue-400 disabled:text-gray-50 font-bold py-2 px-4 border-b-4 border-r-4 border-blue-700 hover:border-blue-500 rounded"
+    className='bg-blue-500 text-white active:bg-blue-500 hover:bg-blue-500 disabled:bg-blue-400 disabled:text-gray-50 font-bold py-2 px-4 border-b-4 border-r-4 border-blue-700 hover:border-blue-500 rounded'
     aria-label={text}
     disabled={disabled}
     onClick={() => onClick?.()}

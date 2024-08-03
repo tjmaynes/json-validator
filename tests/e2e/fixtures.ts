@@ -11,7 +11,4 @@ const getInvalidJsonExamples = () =>
     { text: "'", description: 'incomplete' },
   ].map((example) => ({ ...example, isValid: false }))
 
-export const getJsonExamples = () => [
-  ...getValidJsonExamples(),
-  ...getInvalidJsonExamples(),
-]
+export const getJsonExamples = () => [...getValidJsonExamples(), ...getInvalidJsonExamples()]

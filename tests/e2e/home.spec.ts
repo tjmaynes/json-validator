@@ -12,7 +12,7 @@ test.describe('when a user navigates to the homepage', () => {
 
   test('has heading', async ({ page }) => {
     await page.getByText('JSON Validator').click()
-    await expect(page).toHaveURL('https://github.com/tjmaynes/json-validator')
+    await expect(page).toHaveURL('https://github.com/tjmaynes/json-validator-app')
   })
 
   test('has footer', async ({ page }) => {
@@ -66,12 +66,8 @@ test.describe('when a user navigates to the homepage', () => {
     }) => {
       await page.getByLabel('Copy').click()
 
-      if (
-        !['webkit', 'Desktop Safari', 'Mobile Safari'].includes(browserName)
-      ) {
-        const handle = await page.evaluateHandle(() =>
-          navigator.clipboard.readText()
-        )
+      if (!['webkit', 'Desktop Safari', 'Mobile Safari'].includes(browserName)) {
+        const handle = await page.evaluateHandle(() => navigator.clipboard.readText())
         const clipboardContent = await handle.jsonValue()
         expect(clipboardContent).toEqual(expected)
       }
@@ -79,23 +75,17 @@ test.describe('when a user navigates to the homepage', () => {
       await expect(page.getByText('Copied to clipboard!')).toBeVisible()
     })
 
-    test('should compress json when compress button clicked', async ({
-      page,
-    }) => {
+    test('should compress json when compress button clicked', async ({ page }) => {
       await expect(placeholderText.getByText(expected)).toBeVisible()
 
       await page.getByLabel('Compress').click()
 
-      await expect(
-        placeholderText.getByText('[{"hello":"world"},{"green":"red"}]')
-      ).toBeVisible()
+      await expect(placeholderText.getByText('[{"hello":"world"},{"green":"red"}]')).toBeVisible()
 
       await expect(page.getByText('Compressed!')).toBeVisible()
     })
 
-    test('should clear textarea when clear button clicked', async ({
-      page,
-    }) => {
+    test('should clear textarea when clear button clicked', async ({ page }) => {
       await expect(placeholderText.getByText(expected)).toBeVisible()
 
       await page.getByLabel('Clear').click()

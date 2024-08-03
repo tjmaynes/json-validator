@@ -8,17 +8,12 @@ type JsonEditorProps = {
   cssAttributes?: CSSProperties
 }
 
-export const JsonEditor = ({
-  value,
-  onChange,
-  placeholder,
-  cssAttributes,
-}: JsonEditorProps) => {
+export const JsonEditor = ({ value, onChange, placeholder, cssAttributes }: JsonEditorProps) => {
   return (
     <CodeEditor
-      className="bg-amber-100 text-base h-[400px] sm:h-[500px] w-full border-8 rounded-xl"
+      className='bg-amber-100 text-base h-[400px] sm:h-[500px] w-full border-8 rounded-xl'
       value={value}
-      language="json"
+      language='json'
       aria-label={placeholder}
       placeholder={placeholder}
       onPaste={(e) => onChange?.(e.clipboardData.getData('Text'))}
@@ -26,8 +21,7 @@ export const JsonEditor = ({
       style={{
         ...cssAttributes,
         overflow: 'scroll',
-        fontFamily:
-          'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
+        fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
       }}
     />
   )
